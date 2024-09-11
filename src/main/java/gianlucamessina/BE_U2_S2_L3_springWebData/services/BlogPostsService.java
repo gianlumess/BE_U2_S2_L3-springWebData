@@ -6,9 +6,7 @@ import gianlucamessina.BE_U2_S2_L3_springWebData.repositories.BlogPostsRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -16,33 +14,25 @@ public class BlogPostsService {
     @Autowired
     private BlogPostsRepository blogPostsRepository;
 
-    private List<BlogPost> blogPostsList=new ArrayList<>();
+
 
     public List<BlogPost>findAll(){
         return this.blogPostsRepository.findAll();
     }
 
     public BlogPost findById(UUID blogPostId){
-        BlogPost found=null;
-        for (BlogPost blogPost: this.blogPostsList) {
-            if(blogPost.getId()==blogPostId) found=blogPost;
-        }
-        if(found==null)throw new NotFoundException(blogPostId);
-        return found;
+        return this.blogPostsRepository.findById(blogPostId).orElseThrow(()->new NotFoundException(blogPostId));
+
     }
 
     public BlogPost saveBlogPost(BlogPost body){
 
-        this.blogPostsList.add(body);
         return blogPostsRepository.save(body);
     }
 
     public BlogPost findByIdAndUpdate(UUID blogPostId, BlogPost updatedBlogPost){
-        BlogPost found=null;
-        for (BlogPost blogPost: this.blogPostsList) {
-            if(blogPost.getId()==blogPostId) found=blogPost;
-        }
-        if (found==null)throw new NotFoundException(blogPostId);
+        BlogPost found=this.findById(blogPostId);
+
 
         found.setCategoria(updatedBlogPost.getCategoria());
         found.setTitolo(updatedBlogPost.getTitolo());
@@ -50,16 +40,11 @@ public class BlogPostsService {
         found.setContenuto(updatedBlogPost.getContenuto());
         found.setTempoLettura(updatedBlogPost.getTempoLettura());
 
-        return found;
+        return this.blogPostsRepository.save(found);
     }
 
     public void findByIdAndDelete(UUID blogPostId){
-        BlogPost found=null;
-        for (BlogPost blogPost: this.blogPostsList) {
-            if(blogPost.getId()==blogPostId) found=blogPost;
-        }
-        if (found==null)throw new NotFoundException(blogPostId);
-
-        this.blogPostsList.remove(found);
+        BlogPost found=this.findById(blogPostId);
+        this.blogPostsRepository.delete(found);
     }
 }
