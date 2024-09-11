@@ -2,6 +2,7 @@ package gianlucamessina.BE_U2_S2_L3_springWebData.services;
 
 import gianlucamessina.BE_U2_S2_L3_springWebData.entities.BlogPost;
 import gianlucamessina.BE_U2_S2_L3_springWebData.exceptions.NotFoundException;
+import gianlucamessina.BE_U2_S2_L3_springWebData.payloads.BlogPostPayload;
 import gianlucamessina.BE_U2_S2_L3_springWebData.repositories.BlogPostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,10 @@ public class BlogPostsService {
         return blogPostsRepository.save(body);
     }
 
-    public BlogPost findByIdAndUpdate(UUID blogPostId, BlogPost updatedBlogPost){
+    public BlogPost findByIdAndUpdate(UUID blogPostId, BlogPostPayload updatedBlogPost){
         BlogPost found=this.findById(blogPostId);
 
-
+        
         found.setCategoria(updatedBlogPost.getCategoria());
         found.setTitolo(updatedBlogPost.getTitolo());
         found.setCover(updatedBlogPost.getCover());
