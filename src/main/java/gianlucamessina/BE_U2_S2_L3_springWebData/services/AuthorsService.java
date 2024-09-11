@@ -1,14 +1,13 @@
 package gianlucamessina.BE_U2_S2_L3_springWebData.services;
 
 import gianlucamessina.BE_U2_S2_L3_springWebData.entities.Author;
+import gianlucamessina.BE_U2_S2_L3_springWebData.exceptions.BadRequestException;
 import gianlucamessina.BE_U2_S2_L3_springWebData.exceptions.NotFoundException;
 import gianlucamessina.BE_U2_S2_L3_springWebData.repositories.AuhtorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -16,52 +15,46 @@ public class AuthorsService {
     @Autowired
     private AuhtorRepository auhtorRepository;
 
-    private List<Author>authorList=new ArrayList<>();
+
 
     public List<Author>findAll(){
-        return this.authorList;
+        return this.auhtorRepository.findAll();
     }
 
     public Author findById(UUID authorId){
-        Author found=null;
-        for (Author author:authorList){
-            if (author.getId()==authorId) found=author;
-        }
-        if (found==null)throw new NotFoundException(authorId);
-        return found;
+        return this.auhtorRepository.findById(authorId).orElseThrow(()->new NotFoundException(authorId));
     }
 
     public Author saveAuthor(Author body){
-        Random random=new Random();
+        //Controllo se l'email che si vuole utilizzare per creare l'autore non sia già utilizzata
+        this.auhtorRepository.findByEmail(body.getEmail()).ifPresent(author -> {
+            throw new BadRequestException("Impossibile creare autore in quanto l'email: "+body.getEmail()+" è già in uso!");
+        });
         body.setAvatar("https://ui-avatars.com/api/?name="+body.getNome()+"+"+body.getCognome());
-        this.authorList.add(body);
         this.auhtorRepository.save(body);
         return body;
     }
 
     public Author findByIdAndUpdate(UUID authorId,Author updatedAuthor){
-        Author found=null;
-        for (Author author:authorList){
-            if (author.getId()==authorId) found=author;
-        }
-        if (found==null)throw new NotFoundException(authorId);
+        Author found=this.findById(authorId);
+
+        //Controllo se l'email che si vuole utilizzare per creare l'autore non sia già utilizzata
+        this.auhtorRepository.findByEmail(updatedAuthor.getEmail()).ifPresent(author -> {
+            throw new BadRequestException("Impossibile creare autore in quanto l'email: "+updatedAuthor.getEmail()+" è già in uso!");
+        });
 
         found.setNome(updatedAuthor.getNome());
         found.setCognome(updatedAuthor.getCognome());
         found.setEmail(updatedAuthor.getEmail());
         found.setDataNascita(updatedAuthor.getDataNascita());
-        found.setAvatar(updatedAuthor.getAvatar());
+        found.setAvatar("https://ui-avatars.com/api/?name="+found.getNome()+"+"+found.getCognome());
 
-        return found;
+        return this.auhtorRepository.save(found);
     }
 
     public void findByIdAndDelete(UUID authorId){
-        Author found=null;
-        for (Author author:authorList){
-            if (author.getId()==authorId) found=author;
-        }
-        if (found==null)throw new NotFoundException(authorId);
+        Author found=this.findById(authorId);
 
-        this.authorList.remove(found);
+        this.auhtorRepository.delete(found);
     }
 }

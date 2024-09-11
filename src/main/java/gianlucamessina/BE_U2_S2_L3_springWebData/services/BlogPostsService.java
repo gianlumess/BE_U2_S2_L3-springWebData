@@ -2,6 +2,8 @@ package gianlucamessina.BE_U2_S2_L3_springWebData.services;
 
 import gianlucamessina.BE_U2_S2_L3_springWebData.entities.BlogPost;
 import gianlucamessina.BE_U2_S2_L3_springWebData.exceptions.NotFoundException;
+import gianlucamessina.BE_U2_S2_L3_springWebData.repositories.BlogPostsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,10 +13,13 @@ import java.util.UUID;
 
 @Service
 public class BlogPostsService {
+    @Autowired
+    private BlogPostsRepository blogPostsRepository;
+
     private List<BlogPost> blogPostsList=new ArrayList<>();
 
     public List<BlogPost>findAll(){
-        return this.blogPostsList;
+        return this.blogPostsRepository.findAll();
     }
 
     public BlogPost findById(UUID blogPostId){
@@ -27,9 +32,9 @@ public class BlogPostsService {
     }
 
     public BlogPost saveBlogPost(BlogPost body){
-        Random random=new Random();
+
         this.blogPostsList.add(body);
-        return body;
+        return blogPostsRepository.save(body);
     }
 
     public BlogPost findByIdAndUpdate(UUID blogPostId, BlogPost updatedBlogPost){
