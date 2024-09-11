@@ -1,12 +1,13 @@
 package gianlucamessina.BE_U2_S2_L3_springWebData.services;
 
-import gianlucamessina.BE_U2_S2_L2_SpringWeb.entities.BlogPost;
-import gianlucamessina.BE_U2_S2_L2_SpringWeb.exceptions.NotFoundException;
+import gianlucamessina.BE_U2_S2_L3_springWebData.entities.BlogPost;
+import gianlucamessina.BE_U2_S2_L3_springWebData.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class BlogPostsService {
@@ -16,7 +17,7 @@ public class BlogPostsService {
         return this.blogPostsList;
     }
 
-    public BlogPost findById(int blogPostId){
+    public BlogPost findById(UUID blogPostId){
         BlogPost found=null;
         for (BlogPost blogPost: this.blogPostsList) {
             if(blogPost.getId()==blogPostId) found=blogPost;
@@ -27,12 +28,11 @@ public class BlogPostsService {
 
     public BlogPost saveBlogPost(BlogPost body){
         Random random=new Random();
-        body.setId(random.nextInt(1,20000));
         this.blogPostsList.add(body);
         return body;
     }
 
-    public BlogPost findByIdAndUpdate(int blogPostId, BlogPost updatedBlogPost){
+    public BlogPost findByIdAndUpdate(UUID blogPostId, BlogPost updatedBlogPost){
         BlogPost found=null;
         for (BlogPost blogPost: this.blogPostsList) {
             if(blogPost.getId()==blogPostId) found=blogPost;
@@ -48,7 +48,7 @@ public class BlogPostsService {
         return found;
     }
 
-    public void findByIdAndDelete(int blogPostId){
+    public void findByIdAndDelete(UUID blogPostId){
         BlogPost found=null;
         for (BlogPost blogPost: this.blogPostsList) {
             if(blogPost.getId()==blogPostId) found=blogPost;

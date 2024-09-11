@@ -1,12 +1,13 @@
 package gianlucamessina.BE_U2_S2_L3_springWebData.controllers;
 
-import gianlucamessina.BE_U2_S2_L2_SpringWeb.entities.BlogPost;
-import gianlucamessina.BE_U2_S2_L2_SpringWeb.services.BlogPostsService;
+import gianlucamessina.BE_U2_S2_L3_springWebData.entities.BlogPost;
+import gianlucamessina.BE_U2_S2_L3_springWebData.services.BlogPostsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/blogPosts")
@@ -22,7 +23,7 @@ public class BlogPostsController {
 
     //GET CHE RITORNA UN SINGOLO BLOG POST (http://localhost:3001/blogPosts/{blogPostId})
     @GetMapping("/{blogPostId}")
-    private BlogPost getBlogPostById(@PathVariable int blogPostId){
+    private BlogPost getBlogPostById(@PathVariable UUID blogPostId){
         return blogPostsService.findById(blogPostId);
     }
 
@@ -37,7 +38,7 @@ public class BlogPostsController {
     //PUT PER MODIFICARE UN BLOG POST
 
     @PutMapping("/{blogPostId}")
-    private BlogPost findBlogPostByIdAndUpdate(@PathVariable int blogPostId,@RequestBody BlogPost blogPost){
+    private BlogPost findBlogPostByIdAndUpdate(@PathVariable UUID blogPostId,@RequestBody BlogPost blogPost){
         return blogPostsService.findByIdAndUpdate(blogPostId,blogPost);
     }
 
@@ -45,7 +46,7 @@ public class BlogPostsController {
 
     @DeleteMapping("/{blogPostId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    private void findBlogPostByIdAndDelete(@PathVariable int blogPostId){
+    private void findBlogPostByIdAndDelete(@PathVariable UUID blogPostId){
        blogPostsService.findByIdAndDelete(blogPostId);
     }
 }

@@ -1,22 +1,28 @@
 package gianlucamessina.BE_U2_S2_L3_springWebData.services;
 
-import gianlucamessina.BE_U2_S2_L2_SpringWeb.entities.Author;
-import gianlucamessina.BE_U2_S2_L2_SpringWeb.exceptions.NotFoundException;
+import gianlucamessina.BE_U2_S2_L3_springWebData.entities.Author;
+import gianlucamessina.BE_U2_S2_L3_springWebData.exceptions.NotFoundException;
+import gianlucamessina.BE_U2_S2_L3_springWebData.repositories.AuhtorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class AuthorsService {
+    @Autowired
+    private AuhtorRepository auhtorRepository;
+
     private List<Author>authorList=new ArrayList<>();
 
     public List<Author>findAll(){
         return this.authorList;
     }
 
-    public Author findById(int authorId){
+    public Author findById(UUID authorId){
         Author found=null;
         for (Author author:authorList){
             if (author.getId()==authorId) found=author;
@@ -27,13 +33,13 @@ public class AuthorsService {
 
     public Author saveAuthor(Author body){
         Random random=new Random();
-        body.setId(random.nextInt(1,20000));
         body.setAvatar("https://ui-avatars.com/api/?name="+body.getNome()+"+"+body.getCognome());
         this.authorList.add(body);
+        this.auhtorRepository.save(body);
         return body;
     }
 
-    public Author findByIdAndUpdate(int authorId,Author updatedAuthor){
+    public Author findByIdAndUpdate(UUID authorId,Author updatedAuthor){
         Author found=null;
         for (Author author:authorList){
             if (author.getId()==authorId) found=author;
@@ -49,7 +55,7 @@ public class AuthorsService {
         return found;
     }
 
-    public void findByIdAndDelete(int authorId){
+    public void findByIdAndDelete(UUID authorId){
         Author found=null;
         for (Author author:authorList){
             if (author.getId()==authorId) found=author;
