@@ -9,7 +9,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @Entity
 @Table(name = "authors")
@@ -24,4 +23,11 @@ public class Author {
     @Column(name = "data_nascita")
     private LocalDate dataNascita;
     private String avatar;
+
+    public Author(String nome, String cognome, String email, LocalDate dataNascita) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.dataNascita = dataNascita;
+    }
 }

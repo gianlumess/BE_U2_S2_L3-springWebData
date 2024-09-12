@@ -1,5 +1,6 @@
 package gianlucamessina.BE_U2_S2_L3_springWebData.services;
 
+import gianlucamessina.BE_U2_S2_L3_springWebData.entities.Author;
 import gianlucamessina.BE_U2_S2_L3_springWebData.entities.BlogPost;
 import gianlucamessina.BE_U2_S2_L3_springWebData.exceptions.NotFoundException;
 import gianlucamessina.BE_U2_S2_L3_springWebData.payloads.BlogPostPayload;
@@ -14,7 +15,8 @@ import java.util.UUID;
 public class BlogPostsService {
     @Autowired
     private BlogPostsRepository blogPostsRepository;
-
+    @Autowired
+    private AuthorsService authorsService;
 
 
     public List<BlogPost>findAll(){
@@ -26,15 +28,17 @@ public class BlogPostsService {
 
     }
 
-    public BlogPost saveBlogPost(BlogPost body){
+    public BlogPost saveBlogPost(BlogPostPayload body){
+        Author author=authorsService.findById(body.getAuthorId());
+        BlogPost blogPost=new BlogPost(body.getCategoria(), body.getTitolo(), body.getCover(), body.getContenuto(), author, body.getTempoLettura());
 
-        return blogPostsRepository.save(body);
+        return blogPostsRepository.save(blogPost);
     }
 
     public BlogPost findByIdAndUpdate(UUID blogPostId, BlogPostPayload updatedBlogPost){
         BlogPost found=this.findById(blogPostId);
 
-        
+
         found.setCategoria(updatedBlogPost.getCategoria());
         found.setTitolo(updatedBlogPost.getTitolo());
         found.setCover(updatedBlogPost.getCover());

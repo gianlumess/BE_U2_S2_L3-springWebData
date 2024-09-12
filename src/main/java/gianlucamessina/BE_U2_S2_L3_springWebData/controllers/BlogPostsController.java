@@ -1,6 +1,7 @@
 package gianlucamessina.BE_U2_S2_L3_springWebData.controllers;
 
 import gianlucamessina.BE_U2_S2_L3_springWebData.entities.BlogPost;
+import gianlucamessina.BE_U2_S2_L3_springWebData.payloads.BlogPostPayload;
 import gianlucamessina.BE_U2_S2_L3_springWebData.services.BlogPostsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,14 +32,14 @@ public class BlogPostsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private BlogPost createBlogPost(@RequestBody BlogPost body){
+    private BlogPost createBlogPost(@RequestBody BlogPostPayload body){
         return blogPostsService.saveBlogPost(body);
     }
 
     //PUT PER MODIFICARE UN BLOG POST
 
     @PutMapping("/{blogPostId}")
-    private BlogPost findBlogPostByIdAndUpdate(@PathVariable UUID blogPostId,@RequestBody BlogPost blogPost){
+    private BlogPost findBlogPostByIdAndUpdate(@PathVariable UUID blogPostId,@RequestBody BlogPostPayload blogPost){
         return blogPostsService.findByIdAndUpdate(blogPostId,blogPost);
     }
 

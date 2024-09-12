@@ -8,7 +8,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @Entity
 @Table(name = "blog_posts")
@@ -26,4 +25,13 @@ public class BlogPost {
     private Author author;
     @Column(name = "tempo_lettura")
     private int tempoLettura;
+
+    public BlogPost(String categoria, String titolo, String cover, String contenuto, Author author, int tempoLettura) {
+        this.categoria = categoria;
+        this.titolo = titolo;
+        this.cover = cover;
+        this.contenuto = contenuto;
+        this.author = author;
+        this.tempoLettura = tempoLettura;
+    }
 }
